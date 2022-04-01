@@ -3,7 +3,22 @@ import Header from "./components/header/Header";
 import List from "./components/list/List";
 import Map from "./components/map/Map";
 
+import { useState, useEffect } from 'react';
+
+import { getPlacesData } from './api';
+
 function App() {
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    getPlacesData()
+      .then(data => {
+        console.log(data)
+        setPlaces(data);
+      })
+
+  }, [])
+
   return (
     <>
       <CssBaseline />
