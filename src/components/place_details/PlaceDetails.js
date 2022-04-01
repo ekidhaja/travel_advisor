@@ -1,6 +1,8 @@
-const PlaceDetails = () => {
+const PlaceDetails = ({ place }) => {
     return ( 
-        <div>Place details</div>
+        <div>
+            {place.name}
+        </div>
      );
 }
  
