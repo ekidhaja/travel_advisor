@@ -5,7 +5,7 @@ import Map from "./components/map/Map";
 
 import { useState, useEffect } from 'react';
 
-import { getPlacesData } from './api';
+import { getPlacesData, getWeatherData } from './api';
 
 function App() {
   const [places, setPlaces] = useState([]);
@@ -18,6 +18,7 @@ function App() {
   const [rating, setRating] = useState('');
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [autocomplete, setAutocomplete] = useState(null);
+  const [weatherData, setWeatherData] = useState([]);
 
   //get user's geolocation
   useEffect(() => {
@@ -33,10 +34,16 @@ function App() {
     setFilteredPlaces(filtered);
   }, [rating]);
 
-  //fetch places data based on user geolocation
+  //fetch data based on user geolocation
   useEffect(() => {
     if(bounds) {
       setIsLoading(true);
+
+      //fetch weather data based on user geolocation
+      getWeatherData(coords.lat, coords.lng)
+        .then((data) => setWeatherData(data));
+
+      //fetch places data based on user geolocation
       getPlacesData(type, bounds.sw, bounds.ne)
       .then(data => {
           setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
@@ -81,6 +88,7 @@ function App() {
                 coords={coords}
                 places={filteredPlaces.length ? filteredPlaces : places}
                 setChildClicked={setChildClicked}
+                weatherData={weatherData}
               />
           </Grid>
       </Grid>
