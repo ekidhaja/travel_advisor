@@ -6,7 +6,7 @@ import useStyles from './styles.js';
 const List = ({ places, childClicked, isLoading, type, setType, rating, setRating }) => {
     const classes = useStyles();
     const [elRefs, setElRefs] = useState([]);
-
+    
     //get references to all places elements on the dom
     useEffect(() => {
         setElRefs((refs) => Array(places?.length).fill().map((_, i) => refs[i] || createRef()));
@@ -14,7 +14,7 @@ const List = ({ places, childClicked, isLoading, type, setType, rating, setRatin
 
     return ( 
         <div className={classes.container}>
-            <Typography variant="h4">Food & Dining around you</Typography>
+            <Typography variant="h4"><span style={{ textTransform: 'capitalize'}}>{type}</span> around you</Typography>
             {isLoading ? (
                 <div className={classes.loading}>
                 <CircularProgress size="5rem" />
@@ -38,12 +38,22 @@ const List = ({ places, childClicked, isLoading, type, setType, rating, setRatin
                         <MenuItem value="4.5">Above 4.5</MenuItem>
                     </Select>
                 </FormControl>
+
+                {/*display places results */}
                 <Grid container spacing={3} className={classes.list}>
-                    {places?.map((place, i) => (
+                   {places?.length ? places.map((place, i) => (
                     <Grid ref={elRefs[i]} key={i} item xs={12}>
                         <PlaceDetails selected={Number(childClicked) === i} refProp={elRefs[i]} place={place} />
                     </Grid>
-                    ))}
+                   )) 
+                   : <Grid item xs={12}><h2>No results found!</h2></Grid>} 
+                   
+                   
+                   {/*{places?.map((place, i) => (
+                    <Grid ref={elRefs[i]} key={i} item xs={12}>
+                        <PlaceDetails selected={Number(childClicked) === i} refProp={elRefs[i]} place={place} />
+                    </Grid>
+                   ))} */}
                 </Grid>
             </>
             )}
